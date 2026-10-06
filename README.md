@@ -24,6 +24,16 @@ The Chrome Web Store installation link will be added after review and publicatio
 
 ## Develop and evaluate (contributors)
 
+### Download an automatically built testing package
+
+Every successful push or pull request saves an extension ZIP, matching GPL source ZIP and SHA-256 checksums for 30 days. Open [Actions → Checks](https://github.com/paulcastor30/marketplace-profit-intelligence/actions/workflows/ci.yml), select a successful run, and download its `extension-testing-...` artifact. Sign in to GitHub to download artifacts. You can also choose **Run workflow** on that page to build a selected branch manually.
+
+Extract the downloaded artifact, then extract `ecommerce-profit-intelligence-VERSION.zip` (not the source ZIP). In `chrome://extensions`, enable **Developer mode**, choose **Load unpacked**, and select the extracted folder containing `manifest.json`. GitHub's **Download ZIP** button downloads source code and cannot be loaded directly into Chrome.
+
+For permanent release downloads, see the [release procedure](docs/release-process.md). Version tags create GitHub releases only after all readiness gates pass. Chrome Web Store submission remains manual.
+
+### Build locally
+
 Use Node 24+ and pnpm 11.25.0:
 
 ```sh

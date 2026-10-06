@@ -1,5 +1,28 @@
 # Release procedure
 
+## Automatic testing builds
+
+The **Checks** workflow runs on pushes and pull requests. Maintainers can also select **Actions → Checks → Run workflow** and choose a branch. After lint, type checking, financial tests, browser/accessibility tests, coverage, packaging and production dependency audit pass, the run saves an `extension-testing-COMMIT` artifact for 30 days.
+
+Download it from the run's **Artifacts** section while signed in to GitHub. It contains the extension ZIP, corresponding GPL source ZIP and `SHA256SUMS`. Extract the outer artifact download, then extract the extension ZIP and load the folder containing `manifest.json` in Chrome. The source ZIP and GitHub's repository ZIP are for development, not direct installation. Checksums use filenames relative to the extracted artifact directory; on macOS run `shasum -a 256 -c SHA256SUMS` there.
+
+These builds are for testing and do not change release readiness or publish to Chrome. No additional repository secret is needed.
+
+## Versioned GitHub releases
+
+The existing release workflow runs when a tag such as `v0.1.0` is pushed. It verifies `release-gate.json`, runs the full checks, and requires the tag, package version and manifest version to match. It then creates a public GitHub release with both ZIPs and checksums using GitHub's built-in token. The current pending gates intentionally block public releases.
+
+Once readiness is documented and the steps below are complete, push the matching version tag:
+
+```sh
+git tag v0.1.0
+git push origin v0.1.0
+```
+
+For later versions, update the package and manifest version first and use that new version in both commands. Do not move or reuse a published release tag. GitHub release assets provide downloads beyond the testing artifact retention period.
+
+## Maintainer checklist
+
 0. A maintainer reviews docs/qa-report.md and completes release-gate.json with actual evidence. Never change gates to true just to make CI pass.
 1. Update fee evidence/configuration if applicable; increment version in package.json and public/manifest.json consistently. Update CHANGELOG.
 2. Run a frozen dependency install, lint, typecheck, unit/coverage tests, build, browser/accessibility tests and audit. Review unpatched development advisories explicitly; production bundle must contain no unexpected code.

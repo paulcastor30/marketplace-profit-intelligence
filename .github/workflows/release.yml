@@ -21,7 +21,10 @@ jobs:
         env:
           RELEASE_TAG: ${{ github.ref_name }}
         run: node -e "const p=require('./package.json'); const m=require('./public/manifest.json'); if(process.env.RELEASE_TAG!=='v'+p.version || p.version!==m.version)process.exit(1)"
-      - run: sha256sum artifacts/*.zip > artifacts/SHA256SUMS
+      - name: Generate package checksums
+        run: |
+          cd artifacts
+          sha256sum *.zip > SHA256SUMS
       - name: Publish GitHub release artifact
         env:
           GH_TOKEN: ${{ github.token }}

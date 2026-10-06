@@ -1,5 +1,8 @@
 name: Checks
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
 permissions:
   contents: read
 jobs:
@@ -26,3 +29,27 @@ jobs:
       - run: pnpm test:coverage
       - run: pnpm package
       - run: pnpm audit --prod
+      - name: Generate package checksums
+        run: |
+          cd artifacts
+          sha256sum *.zip > SHA256SUMS
+      - name: Save downloadable testing packages
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: extension-testing-${{ github.sha }}
+          path: |
+            artifacts/*.zip
+            artifacts/SHA256SUMS
+          if-no-files-found: error
+          retention-days: 30
+      - name: Explain installation
+        run: |
+          cat >> "$GITHUB_STEP_SUMMARY" <<'EOF'
+          ## Download this testing build
+          Download the `extension-testing-...` artifact at the bottom of this run page.
+          Extract that download, then extract the extension ZIP (the one without `source` in its name).
+          In Chrome, open `chrome://extensions`, enable Developer mode, and choose **Load unpacked**.
+          Select the extracted folder containing `manifest.json`.
+
+          This is a prerelease testing build. Publication readiness checks still apply.
+          EOF
