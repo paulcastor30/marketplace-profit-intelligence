@@ -1,0 +1,16 @@
+{
+  "version": "0.1.0",
+  "feeEvidence": false,
+  "liveShopeeCompatibility": false,
+  "nativePanelAndZoom": false,
+  "screenReader": false,
+  "representativeUsers": false,
+  "publicPolicyAndSupport": false,
+  "branding": false,
+  "securityReview": true,
+  "evidence": [
+    "docs/qa-report.md",
+    "docs/dependency-audit.json",
+    "docs/fee-methodology.md"
+  ]
+}

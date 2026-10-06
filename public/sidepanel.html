@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>E-commerce Profit Intelligence</title>
+    <link rel="stylesheet" href="panel.css" />
+  </head>
+  <body>
+    <a class="skip" href="#calculator">Skip to calculator</a>
+    <main>
+      <header>
+        <div class="brand">
+          <span class="mark" aria-hidden="true">₱</span
+          ><span
+            >Profit Intelligence<small
+              >Shopee Philippines · independent tool</small
+            ></span
+          >
+        </div>
+        <h1>Know what you may earn.</h1>
+        <p>
+          Enter what the product costs you. See what may remain after fees and
+          other costs.
+        </p>
+      </header>
+      <section aria-label="Your product">
+        <p class="eyebrow">YOUR PRODUCT</p>
+        <p id="product-name">Manual calculation</p>
+        <p id="detection" class="note" role="status">
+          Open a Shopee Philippines product, or enter a selling price below.
+        </p>
+      </section>
+      <form id="calculator" novalidate>
+        <label for="price">Selling price per item (₱)</label
+        ><input
+          id="price"
+          name="price"
+          inputmode="decimal"
+          autocomplete="off"
+          aria-describedby="price-help"
+          required
+        />
+        <p id="price-help" class="help">
+          Use the selected item's price before any extra seller voucher entered
+          below. Do not use a price range.
+        </p>
+        <label for="productCost">How much does this product cost you? (₱)</label
+        ><input
+          id="productCost"
+          name="productCost"
+          inputmode="decimal"
+          autocomplete="off"
+          required
+          aria-describedby="cost-help"
+        />
+        <p id="cost-help" class="help">
+          Product cost per item. Enter zero if you received it for free.
+        </p>
+        <details id="other-costs">
+          <summary>Add other costs</summary>
+          <p class="help">
+            All costs below are for one order, except product cost. Leave unused
+            costs blank.
+          </p>
+          <div id="optional-fields"></div>
+          <label for="quantity">Number of identical items in the order</label
+          ><input
+            id="quantity"
+            name="quantity"
+            inputmode="numeric"
+            value="1"
+            aria-describedby="quantity-help"
+          />
+          <p id="quantity-help" class="help">
+            Use one product and variant. Packaging and advertising stay per
+            order.
+          </p>
+        </details>
+        <label for="categoryPreset"
+          >Product category (standard Marketplace seller)</label
+        ><select id="categoryPreset">
+          <option value="">
+            Choose a reference category, or enter fees manually
+          </option>
+        </select>
+        <p class="help">
+          Rates are references for eligible standard sellers. Review your
+          account exemptions and enrolled programs.
+        </p>
+        <details id="fees">
+          <summary>
+            Review fee assumptions <span id="fee-state">— required once</span>
+          </summary>
+          <p class="note">
+            Select a verified reference category above, or enter VAT-inclusive
+            rates from Seller Centre. Confirm seller type, exemptions and
+            program enrollment. Manual overrides remain assumptions.
+          </p>
+          <p>
+            <a
+              href="https://seller.shopee.ph/edu/article/21077"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Find your Shopee seller fees (opens a new tab)</a
+            >
+          </p>
+          <label for="sellerType">Your seller type</label
+          ><select id="sellerType">
+            <option value="marketplace">Marketplace seller</option>
+            <option value="mall">Shopee Mall seller</option>
+          </select>
+          <label for="category">Product category from Seller Centre</label
+          ><input id="category" maxlength="100" autocomplete="off" required />
+          <div id="fee-fields"></div>
+          <label for="newSeller" class="check"
+            ><input type="checkbox" id="newSeller" />My seller account qualifies
+            for the first-90-days commission, growth and processing
+            exemption</label
+          ><label for="mdv" class="check"
+            ><input type="checkbox" id="mdv" />My shop participates in Mega
+            Discount Voucher (4%, capped at ₱200 per item)</label
+          ><label for="spike" class="check"
+            ><input type="checkbox" id="spike" />This is an MDV spike-day order
+            (5%; review the cap assumption)</label
+          ><label for="live" class="check"
+            ><input type="checkbox" id="live" />This sale is through Live Xtra
+            (3.36%, or assumed 2.36% with MDV; review the discount
+            interpretation; capped at ₱100 per item)</label
+          ><label for="preOrder" class="check"
+            ><input type="checkbox" id="preOrder" />This is a non-customized
+            pre-order (2%; review fee basis)</label
+          >
+          <label for="processingWaived" class="check"
+            ><input type="checkbox" id="processingWaived" />This order is within
+            my first 50 successful orders this month (₱5 fee waived)</label
+          >
+          <p class="help">
+            Confirm new-seller exemptions in Seller Centre. Enter zero for
+            commission/growth only when your account is exempt. Installment
+            payment fees may require changing the transaction rate.
+          </p>
+          <label for="reviewed" class="check"
+            ><input type="checkbox" id="reviewed" />I reviewed all rates, caps,
+            fee bases, program charges, and waivers for this order.</label
+          >
+          <p class="help">
+            Commission/growth use the price after seller vouchers, rounded to
+            pesos. Transaction fee includes buyer shipping and is rounded to
+            pesos. Shipping/program assumptions use the rounded price per item
+            and centavo fee rounding; check these against your settlement.
+          </p>
+        </details>
+        <p id="fee-date" class="help">
+          Fee schedule last verified (partial): 7 October 2026. Reference rates
+          and account/program eligibility require your review.
+        </p>
+        <div id="error" class="error" role="alert" tabindex="-1" hidden></div>
+        <button class="primary" type="submit">Calculate my profit</button
+        ><button id="reset" type="button" class="quiet">
+          Reset calculation
+        </button>
+      </form>
+      <section
+        id="results"
+        hidden
+        tabindex="-1"
+        aria-labelledby="result-heading"
+      >
+        <p class="eyebrow">YOUR ESTIMATED PROFIT</p>
+        <h2 id="result-heading">Estimated net profit</h2>
+        <p class="profit" id="profit"></p>
+        <p id="unit"></p>
+        <p class="margin" id="margin"></p>
+        <p id="status" class="status"></p>
+        <p id="interpretation"></p>
+        <p id="margin-explanation" class="help"></p>
+        <p id="cost-warning" class="note" hidden>
+          Check your numbers: your product cost is higher than the selling
+          price. This may be correct, but please verify it.
+        </p>
+        <p class="help">
+          Estimate before business income tax, tax credits, refunds and costs
+          you have not included. This is not a guaranteed payout or financial
+          result.
+        </p>
+        <details>
+          <summary>See how this was calculated</summary>
+          <table>
+            <caption>
+              Estimated amounts for this order
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col">Item</th>
+                <th scope="col">Amount</th>
+              </tr>
+            </thead>
+            <tbody id="breakdown"></tbody>
+          </table>
+          <p id="assumption-summary" class="help"></p>
+        </details>
+        <details>
+          <summary>Set a target margin</summary>
+          <p class="help">
+            How much of each ₱100 in sales you want to keep after the costs
+            included.
+          </p>
+          <div class="presets" id="target-presets"></div>
+          <label for="target">Target profit margin (%)</label
+          ><input id="target" inputmode="decimal" value="20" /><button
+            type="button"
+            id="apply-target"
+          >
+            Update my target
+          </button>
+          <p id="target-result"></p>
+        </details>
+        <details>
+          <summary>Try a promotion</summary>
+          <p class="help">
+            Test a reduction in the item price. This keeps your other costs and
+            seller voucher unchanged.
+          </p>
+          <div class="presets" id="promotion-presets"></div>
+          <label for="promotion">Price reduction (%)</label
+          ><input id="promotion" inputmode="decimal" value="10" /><button
+            type="button"
+            id="simulate"
+          >
+            Compare promotion
+          </button>
+          <p id="promotion-error" role="alert"></p>
+          <div id="promotion-result" aria-live="polite"></div>
+        </details>
+        <details>
+          <summary>Show advanced metrics</summary>
+          <dl id="metrics"></dl>
+          <p class="help">
+            Minimum and target prices include a small conservative rounding
+            allowance. ROI uses product cost, packaging, advertising, seller
+            shipping, fixed affiliate and other costs as the invested cost.
+            Percentage fees, seller vouchers and percentage affiliate fees are
+            excluded from that ROI denominator. Break-even ROAS is sales revenue
+            divided by the maximum advertising budget. No positive budget means
+            no attainable ROAS.
+          </p>
+        </details>
+      </section>
+      <p
+        id="announcement"
+        class="sr-only"
+        aria-live="polite"
+        aria-atomic="true"
+      ></p>
+      <details id="settings">
+        <summary>Settings, data &amp; about</summary>
+        <p>
+          Your saved costs stay on this device. Product names, URLs, prices and
+          product costs are never saved in a cost profile.
+        </p>
+        <label for="largeText" class="check"
+          ><input type="checkbox" id="largeText" />Use larger text</label
+        ><button type="button" id="save">
+          Save these default costs and fee assumptions
+        </button>
+        <p id="storage-status" role="status"></p>
+        <button type="button" id="export">Export my saved data</button
+        ><button type="button" id="delete">Delete all saved data</button>
+        <div id="delete-confirm" hidden>
+          <p>
+            Delete your saved default costs and preferences from this device?
+            Your current calculation will stay open.
+          </p>
+          <button type="button" id="confirm-delete">
+            Yes, delete saved data</button
+          ><button type="button" id="cancel-delete">Keep saved data</button>
+        </div>
+        <p>
+          Free and open source under GPL-3.0. No account, ads, telemetry, or
+          automatic financial actions.
+        </p>
+        <p>
+          This project is free and open source. If it saves you time or money,
+          you can support continued development and marketplace fee maintenance.
+        </p>
+        <p id="funding">
+          Support links will be available after the maintainer configures them.
+        </p>
+        <p>Not affiliated with or endorsed by Shopee.</p>
+        <a href="privacy.html" target="_blank" rel="noopener"
+          >Privacy and methodology (opens a new tab)</a
+        >
+      </details>
+      <footer>
+        Made for careful pricing decisions. Shopee Philippines only.
+      </footer>
+    </main>
+    <script src="panel.js"></script>
+  </body>
+</html>

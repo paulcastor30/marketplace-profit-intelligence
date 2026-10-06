@@ -1,0 +1,32 @@
+{
+  "manifest_version": 3,
+  "name": "E-commerce Profit Intelligence",
+  "version": "0.1.0",
+  "description": "Estimate product profit for Shopee Philippines. Local calculations, clear fee assumptions, and no account required.",
+  "minimum_chrome_version": "116",
+  "permissions": ["storage", "sidePanel"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "Estimate your Shopee Philippines profit"
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://shopee.ph/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "icons": {
+    "16": "icons/16.png",
+    "48": "icons/48.png",
+    "128": "icons/128.png"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'none'; connect-src 'none'; base-uri 'none'"
+  }
+}
