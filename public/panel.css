@@ -314,3 +314,10 @@ footer {
 .brand .mark {
   flex-shrink: 0;
 }
+/* Allow longer words in system fonts to reflow inside a zoomed side panel. */
+main {
+  overflow-wrap: anywhere;
+}
+.status {
+  max-width: 100%;
+}

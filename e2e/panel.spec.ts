@@ -138,6 +138,28 @@ test("200% equivalent reflow, larger text, reduced motion and forced colors", as
   await page.getByText("Settings, data & about", { exact: true }).click();
   await page.locator("#largeText").check();
   await expect(page.locator("#largeText")).toBeChecked();
+  const overflow = await page.evaluate(() =>
+    [...document.querySelectorAll<HTMLElement>("main *")]
+      .filter(
+        (node) =>
+          node.getClientRects().length &&
+          node.getBoundingClientRect().right > window.innerWidth + 1,
+      )
+      .map((node) => ({
+        tag: node.tagName,
+        id: node.id,
+        width: node.getBoundingClientRect().width,
+      })),
+  );
+  expect(overflow, "Controls must fit the zoomed panel").toEqual([]);
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await page.addStyleTag({
+    content: ":root {font-family: Arial, sans-serif;}",
+  });
   expect(
     await page.evaluate(
       () => document.documentElement.scrollWidth <= window.innerWidth,
