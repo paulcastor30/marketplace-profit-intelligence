@@ -1,0 +1,22 @@
+name: Report a fee change
+description: Provide official Shopee Philippines evidence for a fee-rule update.
+body:
+  - type: input
+    id: source
+    attributes:
+      label: Official source URL
+    validations:
+      required: true
+  - type: input
+    id: effective
+    attributes:
+      label: Effective date
+    validations:
+      required: true
+  - type: textarea
+    id: conditions
+    attributes:
+      label: Rate, fee base, caps and conditions
+      description: Describe category, seller type, rounding and exceptions. Do not attach private account or settlement information.
+    validations:
+      required: true

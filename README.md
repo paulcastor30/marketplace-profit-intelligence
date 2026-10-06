@@ -2,6 +2,8 @@
 
 [GitHub repository](https://github.com/paulcastor30/marketplace-profit-intelligence) · [Report an issue](https://github.com/paulcastor30/marketplace-profit-intelligence/issues) · [Privacy policy](https://github.com/paulcastor30/marketplace-profit-intelligence/blob/main/docs/privacy-model.md)
 
+[![Checks](https://github.com/paulcastor30/marketplace-profit-intelligence/actions/workflows/ci.yml/badge.svg)](https://github.com/paulcastor30/marketplace-profit-intelligence/actions/workflows/ci.yml)
+
 **Know your estimated profit before you price, promote, or source a product.**
 
 A GPL-3.0 Chrome Manifest V3 side-panel extension for **Shopee Philippines only**. Calculations run on your device. No signup, AI, database, cloud sync or analytics. Independent of Shopee.

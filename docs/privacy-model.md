@@ -10,4 +10,4 @@ No personal data or financial inputs are transmitted to the maintainer or third 
 
 Export and Delete All Saved Data are in Settings, data & about. Delete requires a short confirmation, clears all persistent defaults, and keeps your unsaved current calculation. Uninstalling removes extension storage. JSON exports already downloaded remain until you delete them yourself. Data stored locally is not encrypted by this extension; other people using your browser profile may access it.
 
-Contact/support details and a publicly reachable policy URL must be configured before store submission. This packaged policy is accessible offline. Policy changes require a new extension release and accurate disclosure.
+Public support: https://github.com/paulcastor30/marketplace-profit-intelligence/issues. Public policy: https://github.com/paulcastor30/marketplace-profit-intelligence/blob/main/docs/privacy-model.md. Private security/conduct reporting details still need configuration before public release. This packaged policy is accessible offline. Policy changes require a new extension release and accurate disclosure.

@@ -1,0 +1,25 @@
+name: Report a problem
+description: Report calculation, detection, keyboard, readability or other problems.
+body:
+  - type: markdown
+    attributes:
+      value: "Please use fictional amounts and public product links. Do not post credentials, order statements or other private information."
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: What happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Include extension version, Chrome version, operating system and accessibility tools if relevant.
+    validations:
+      required: true

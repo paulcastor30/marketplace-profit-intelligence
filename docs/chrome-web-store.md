@@ -1,6 +1,6 @@
 # Chrome Web Store preparation
 
-This is a prepared submission, **not a submitted or approved listing**. See chrome-web-store/listing.md and checklist.md. Start distribution in the Philippines. A maintainer Google developer account, public repository, hosted policy/support URLs and branding review are required.
+This is a prepared submission, **not a submitted or approved listing**. See chrome-web-store/listing.md and checklist.md. Start distribution in the Philippines. A maintainer Google developer account, private reporting contacts and branding review are required. The public repository and GitHub-hosted policy/support URLs are configured in the draft listing.
 
 Source checked 2026-10-07: [Chrome Web Store program policies](https://developer.chrome.com/docs/webstore/program-policies/policies). Single purpose, minimum permissions, truthful metadata/data declarations, packaged code and privacy policy are reflected in the design. Policy review is not approval. Recheck policies at submission time.
 
