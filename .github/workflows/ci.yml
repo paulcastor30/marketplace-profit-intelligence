@@ -8,6 +8,8 @@ permissions:
 jobs:
   verify:
     runs-on: ubuntu-24.04
+    outputs:
+      version: ${{ steps.version.outputs.version }}
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
@@ -29,6 +31,17 @@ jobs:
       - run: pnpm test:coverage
       - run: pnpm package
       - run: pnpm audit --prod
+      - name: Check package version
+        id: version
+        run: |
+          node --input-type=module <<'EOF'
+          import { readFileSync, appendFileSync } from 'node:fs';
+          const pkg = JSON.parse(readFileSync('package.json', 'utf8'));
+          const manifest = JSON.parse(readFileSync('dist/manifest.json', 'utf8'));
+          if (!/^\d+\.\d+\.\d+$/.test(pkg.version) || pkg.version !== manifest.version)
+            throw new Error('Package and built manifest versions must match');
+          appendFileSync(process.env.GITHUB_OUTPUT, `version=${pkg.version}\n`);
+          EOF
       - name: Generate package checksums
         run: |
           cd artifacts
@@ -42,6 +55,7 @@ jobs:
             artifacts/SHA256SUMS
           if-no-files-found: error
           retention-days: 30
+          overwrite: true
       - name: Explain installation
         run: |
           cat >> "$GITHUB_STEP_SUMMARY" <<'EOF'
@@ -53,3 +67,48 @@ jobs:
 
           This is a prerelease testing build. Publication readiness checks still apply.
           EOF
+  prerelease:
+    name: Publish testing prerelease
+    needs: verify
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+      actions: read
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      BUILD_VERSION: ${{ needs.verify.outputs.version }}
+      BUILD_SHA: ${{ github.sha }}
+      BUILD_RUN_ID: ${{ github.run_id }}
+      ARTIFACT_NAME: extension-testing-${{ github.sha }}
+      RELEASE_TAG: testing-v${{ needs.verify.outputs.version }}-build.${{ github.run_number }}.${{ github.run_attempt }}
+    steps:
+      - name: Download verified packages
+        run: gh run download "$BUILD_RUN_ID" --name "$ARTIFACT_NAME" --dir artifacts
+      - name: Verify downloaded packages
+        run: |
+          cd artifacts
+          sha256sum --check SHA256SUMS
+          unzip -t "ecommerce-profit-intelligence-${BUILD_VERSION}.zip"
+          unzip -t "ecommerce-profit-intelligence-source-${BUILD_VERSION}.zip"
+      - name: Publish prerelease and installation instructions
+        run: |
+          cat > release-notes.md <<'EOF'
+          **For testing only. This build is not ready for general public use and has not been approved by the Chrome Web Store.**
+
+          Download `ecommerce-profit-intelligence-VERSION.zip` from Assets (the ZIP without `source` in its name). Extract it, open `chrome://extensions`, enable Developer mode, choose **Load unpacked**, and select the extracted folder containing `manifest.json`.
+
+          The matching GPL source ZIP and SHA-256 checksums are also attached. GitHub's automatically generated “Source code” archives cannot be loaded directly into Chrome.
+
+          Automated checks passed. Real Shopee settlement verification, remaining manual accessibility/user tests, and publication readiness checks still apply. See `docs/qa-report.md` and `release-gate.json` in the matching source.
+          EOF
+          printf '\nCommit: `%s`\n\n[Build checks](https://github.com/%s/actions/runs/%s)\n' "$BUILD_SHA" "$GH_REPO" "$BUILD_RUN_ID" >> release-notes.md
+          gh release create "$RELEASE_TAG" \
+            "artifacts/ecommerce-profit-intelligence-${BUILD_VERSION}.zip" \
+            "artifacts/ecommerce-profit-intelligence-source-${BUILD_VERSION}.zip" \
+            artifacts/SHA256SUMS \
+            --target "$BUILD_SHA" --prerelease --latest=false \
+            --title "Testing build ${BUILD_VERSION} (${RELEASE_TAG})" \
+            --notes-file release-notes.md
+          printf '\n[Download testing prerelease](https://github.com/%s/releases/tag/%s)\n' "$GH_REPO" "$RELEASE_TAG" >> "$GITHUB_STEP_SUMMARY"

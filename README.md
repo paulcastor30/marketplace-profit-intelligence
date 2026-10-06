@@ -30,7 +30,9 @@ Every successful push or pull request saves an extension ZIP, matching GPL sourc
 
 Extract the downloaded artifact, then extract `ecommerce-profit-intelligence-VERSION.zip` (not the source ZIP). In `chrome://extensions`, enable **Developer mode**, choose **Load unpacked**, and select the extracted folder containing `manifest.json`. GitHub's **Download ZIP** button downloads source code and cannot be loaded directly into Chrome.
 
-For permanent release downloads, see the [release procedure](docs/release-process.md). Version tags create GitHub releases only after all readiness gates pass. Chrome Web Store submission remains manual.
+Successful builds of `main` also appear under [Releases](https://github.com/paulcastor30/marketplace-profit-intelligence/releases) as **testing prereleases**, with the extension ZIP, matching source and checksums attached. Download the extension ZIP directly and extract it to load in Chrome. These downloads remain available beyond the Actions artifact retention period.
+
+For full releases, see the [release procedure](docs/release-process.md). Version tags create full GitHub releases only after all readiness gates pass. Chrome Web Store submission remains manual.
 
 ### Build locally
 

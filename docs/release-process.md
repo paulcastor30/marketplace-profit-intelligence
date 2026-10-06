@@ -8,9 +8,11 @@ Download it from the run's **Artifacts** section while signed in to GitHub. It c
 
 These builds are for testing and do not change release readiness or publish to Chrome. No additional repository secret is needed.
 
+Successful pushes to `main`, and manual **Run workflow** builds of `main`, also publish a GitHub **prerelease** containing the same verified packages. Find these under the repository's **Releases** section; those assets remain available beyond the Actions artifact retention period. Each receives a unique `testing-vVERSION-build.RUN.ATTEMPT` tag tied to the tested commit. Pull requests, other branches and tag pushes do not publish testing prereleases. Testing releases are marked prerelease and are not marked as the latest stable release. They do not run or satisfy the full-release readiness gate.
+
 ## Versioned GitHub releases
 
-The existing release workflow runs when a tag such as `v0.1.0` is pushed. It verifies `release-gate.json`, runs the full checks, and requires the tag, package version and manifest version to match. It then creates a public GitHub release with both ZIPs and checksums using GitHub's built-in token. The current pending gates intentionally block public releases.
+The existing release workflow runs when a tag such as `v0.1.0` is pushed. It verifies `release-gate.json`, runs the full checks, and requires the tag, package version and manifest version to match. It then creates a full GitHub release with both ZIPs and checksums using GitHub's built-in token. The current pending gates intentionally block full releases.
 
 Once readiness is documented and the steps below are complete, push the matching version tag:
 
